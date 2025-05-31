@@ -1,54 +1,93 @@
-# React + TypeScript + Vite
+# CRUD‐таблица с бесконечной подгрузкой (Infinite Loader)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Проект на **React TS + MobX + Tailwind**:
+- **Динамическая таблица**
+- **Бесконечная подгрузка**
+- **Форма создания новой записи**
+- **API**
+- **Структура FSD**
+- **Тесты**
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## 📁 Структура проекта
+```
+/
+├── db.json
+├── package.json
+├── vite.config.ts
+├── vitest.config.ts
+│
+└── src
+├── assets
+│ └── styles
+│ └── global.css
+│
+├── app
+│ └── store.ts
+│
+├── entities
+│ └── record
+│ ├── api.ts
+│ └── types.ts
+│
+├── features
+│ ├── RecordForm
+│ │ ├── model
+│ │ │ ├── formStore.ts
+│ │ │ └── formStore.test.ts
+│ │ └── ui
+│ │ └── RecordForm.tsx
+│ │
+│ └── TableInfiniteLoad
+│ ├── model
+│ │ ├── tableStore.ts
+│ │ └── tableStore.test.ts
+│ └── ui
+│ └── Table.tsx
+│
+├── pages
+│ └── TablePage
+│ └── TablePage.tsx
+│
+├── shared
+│ ├── lib
+│ │ └── httpClient.ts
+│ └── ui
+│ ├── Button.tsx
+│ ├── Input.tsx
+│ └── Loader.tsx
+│
+├── global.css
+└── main.tsx
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🧩 Как запустить
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+```bash
+   npm install
 ```
+
+```bash
+   npx json-server --watch db.json --port 3001
+```
+
+
+```bash
+   npm run dev
+```
+
+```bash
+   npm test
+```
+
+---
+
+## 📝 О MobX и архитектуре
+
+- **Почему MobX?**
+  1. MobX позволяет очень просто сделать реактивные объекты без лишнего boilerplate.
+  2. `makeAutoObservable(this)` автоматически делает все поля и методы реактивными. Компонент-наблюдатель (`observer`) сам подписывается на изменения.
+  3. Между формой и таблицей легко передавать данные через один общий `rootStore`.
